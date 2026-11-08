@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="BakeRegionResource" format=3 uid="uid://5fkhcy8p3dcw"]
+
+[ext_resource type="Script" uid="uid://cv3bcc3q5lgoh" path="res://addons/tileset_bakery/resources/bake_region_resource.gd" id="1_6wnj1"]
+[ext_resource type="Texture2D" uid="uid://bxdusyb8e5wq0" path="res://art/bake_test_mall.png" id="2_142sc"]
+
+[resource]
+script = ExtResource("1_6wnj1")
+source_image = ExtResource("2_142sc")
+regions = Array[Rect2i]([Rect2i(0, 0, 64, 112), Rect2i(0, 112, 64, 88), Rect2i(0, 200, 32, 88), Rect2i(32, 200, 32, 48), Rect2i(32, 248, 16, 48), Rect2i(48, 248, 16, 24), Rect2i(48, 272, 8, 24)])
+metadata/_custom_type_script = "uid://cv3bcc3q5lgoh"

@@ -30,6 +30,15 @@ func get_complex_wall(key: String) -> Array:
 		"f_d2": _baked_walls[key] = _build_flat_wall(5)
 		"l_d3": _baked_walls[key] = _build_left_wall(6)
 		"r_d3": _baked_walls[key] = _build_right_wall(6)
+		
+		"dr_d0": _baked_walls[key] = _build_right_wall(7)
+		"dl_d0": _baked_walls[key] = _build_left_wall(7)
+		"dr_d1": _baked_walls[key] = _build_right_wall(8)
+		"dl_d1": _baked_walls[key] = _build_left_wall(8)
+		"dr_d2": _baked_walls[key] = _build_right_wall(9)
+		"dl_d2": _baked_walls[key] = _build_left_wall(9)
+		"dr_d3": _baked_walls[key] = _build_right_wall(10)
+		"dl_d3": _baked_walls[key] = _build_left_wall(10)
 	
 	return _baked_walls[key]
 

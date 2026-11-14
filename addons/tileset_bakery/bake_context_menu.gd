@@ -70,6 +70,7 @@ func _bake(definition: BakeRegionResource) -> void:
 	
 	result.atlas_path = atlas_path
 	error = ResourceSaver.save(result, metadata_path)
+	EditorInterface.get_resource_filesystem().scan()
 	
 	if error != OK:
 		push_error("Failed to save metadata: %s" % error_string(error))

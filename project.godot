@@ -27,7 +27,7 @@ window/vsync/vsync_mode=0
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/splatmap/plugin.cfg", "res://addons/tileset_bakery/plugin.cfg")
+enabled=PackedStringArray("res://addons/dungeon_editor/plugin.cfg", "res://addons/splatmap/plugin.cfg", "res://addons/tileset_bakery/plugin.cfg")
 
 [physics]
 

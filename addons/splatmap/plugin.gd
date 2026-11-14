@@ -6,7 +6,7 @@ func _enable_plugin() -> void:
 	# Add autoloads here.
 	add_autoload_singleton("Splatmap", "res://addons/splatmap/core/autoload.gd")
 	
-	ProjectSettings.set_setting("splatmap/canvas_size", Vector2i(256, 240))
+	ProjectSettings.set_setting("splatmap/canvas_size", Vector2i(256, 224))
 
 
 func _disable_plugin() -> void:

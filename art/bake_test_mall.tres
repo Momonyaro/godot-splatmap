@@ -6,5 +6,6 @@
 [resource]
 script = ExtResource("1_6wnj1")
 source_image = ExtResource("2_142sc")
-regions = Array[Rect2i]([Rect2i(0, 0, 64, 112), Rect2i(0, 112, 64, 88), Rect2i(0, 200, 32, 88), Rect2i(32, 200, 32, 48), Rect2i(32, 248, 16, 48), Rect2i(48, 248, 16, 24), Rect2i(48, 272, 8, 24)])
+max_columns = 31
+regions = Array[Rect2i]([Rect2i(0, 0, 64, 112), Rect2i(0, 112, 64, 88), Rect2i(0, 200, 32, 88), Rect2i(32, 200, 32, 48), Rect2i(32, 248, 16, 48), Rect2i(48, 248, 16, 24), Rect2i(48, 272, 8, 24), Rect2i(64, 136, 48, 56), Rect2i(64, 0, 96, 88), Rect2i(64, 88, 96, 48), Rect2i(112, 136, 48, 24)])
 metadata/_custom_type_script = "uid://cv3bcc3q5lgoh"

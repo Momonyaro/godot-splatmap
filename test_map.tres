@@ -44,7 +44,7 @@ script = ExtResource("1_t58h8")
 [sub_resource type="Resource" id="Resource_ye3f2"]
 script = ExtResource("1_t58h8")
 
-[sub_resource type="Resource" id="Resource_cpj3f"]
+[sub_resource type="Resource" id="Resource_2k3nl"]
 script = ExtResource("2_2kbbm")
 type = 1
 definition_id = 0
@@ -62,7 +62,7 @@ definition_id = 0
 [sub_resource type="Resource" id="Resource_c8qvf"]
 script = ExtResource("1_t58h8")
 north_edge = SubResource("Resource_06gy1")
-east_edge = SubResource("Resource_cpj3f")
+east_edge = SubResource("Resource_2k3nl")
 west_edge = SubResource("Resource_hk7hx")
 
 [sub_resource type="Resource" id="Resource_fmxrf"]
@@ -75,13 +75,13 @@ script = ExtResource("2_2kbbm")
 type = 1
 definition_id = 0
 
-[sub_resource type="Resource" id="Resource_x84dq"]
+[sub_resource type="Resource" id="Resource_cpj3f"]
 script = ExtResource("2_2kbbm")
 type = 2
 definition_id = 0
 can_traverse = true
 
-[sub_resource type="Resource" id="Resource_stiiv"]
+[sub_resource type="Resource" id="Resource_x84dq"]
 script = ExtResource("2_2kbbm")
 type = 1
 definition_id = 0
@@ -90,8 +90,8 @@ definition_id = 0
 script = ExtResource("1_t58h8")
 north_edge = SubResource("Resource_jyprf")
 east_edge = SubResource("Resource_fmxrf")
-south_edge = SubResource("Resource_x84dq")
-west_edge = SubResource("Resource_stiiv")
+south_edge = SubResource("Resource_cpj3f")
+west_edge = SubResource("Resource_x84dq")
 
 [sub_resource type="Resource" id="Resource_rcb2e"]
 script = ExtResource("2_2kbbm")
@@ -139,6 +139,7 @@ definition_id = 0
 
 [sub_resource type="Resource" id="Resource_lewc3"]
 script = ExtResource("1_t58h8")
+tags = Array[StringName]([&"spawn"])
 north_edge = SubResource("Resource_n8l6b")
 east_edge = SubResource("Resource_3katv")
 west_edge = SubResource("Resource_x45gn")
@@ -172,7 +173,7 @@ script = ExtResource("2_2kbbm")
 type = 1
 definition_id = 0
 
-[sub_resource type="Resource" id="Resource_tp305"]
+[sub_resource type="Resource" id="Resource_stiiv"]
 script = ExtResource("2_2kbbm")
 type = 2
 definition_id = 0
@@ -180,7 +181,7 @@ can_traverse = true
 
 [sub_resource type="Resource" id="Resource_2hym8"]
 script = ExtResource("1_t58h8")
-north_edge = SubResource("Resource_tp305")
+north_edge = SubResource("Resource_stiiv")
 east_edge = SubResource("Resource_phic1")
 
 [sub_resource type="Resource" id="Resource_6cyhs"]
@@ -212,7 +213,6 @@ definition_id = 0
 
 [sub_resource type="Resource" id="Resource_1c0p6"]
 script = ExtResource("1_t58h8")
-tags = Array[StringName]([&"spawn"])
 east_edge = SubResource("Resource_2nw8b")
 
 [sub_resource type="Resource" id="Resource_qkdgc"]
@@ -230,7 +230,7 @@ script = ExtResource("1_t58h8")
 [sub_resource type="Resource" id="Resource_n0cnl"]
 script = ExtResource("1_t58h8")
 
-[sub_resource type="Resource" id="Resource_fgepb"]
+[sub_resource type="Resource" id="Resource_tp305"]
 script = ExtResource("2_2kbbm")
 type = 2
 definition_id = 0
@@ -243,7 +243,7 @@ definition_id = 0
 
 [sub_resource type="Resource" id="Resource_pxqi8"]
 script = ExtResource("1_t58h8")
-south_edge = SubResource("Resource_fgepb")
+south_edge = SubResource("Resource_tp305")
 west_edge = SubResource("Resource_cmat6")
 
 [sub_resource type="Resource" id="Resource_6yiv1"]
@@ -389,12 +389,12 @@ east_edge = SubResource("Resource_685y0")
 south_edge = SubResource("Resource_e10j2")
 west_edge = SubResource("Resource_0m0kr")
 
-[sub_resource type="Resource" id="Resource_e2q10"]
+[sub_resource type="Resource" id="Resource_fgepb"]
 script = ExtResource("2_2kbbm")
 type = 1
 definition_id = 0
 
-[sub_resource type="Resource" id="Resource_baoov"]
+[sub_resource type="Resource" id="Resource_e2q10"]
 script = ExtResource("2_2kbbm")
 type = 2
 definition_id = 0
@@ -412,8 +412,8 @@ definition_id = 0
 
 [sub_resource type="Resource" id="Resource_i8sgk"]
 script = ExtResource("1_t58h8")
-north_edge = SubResource("Resource_baoov")
-east_edge = SubResource("Resource_e2q10")
+north_edge = SubResource("Resource_e2q10")
+east_edge = SubResource("Resource_fgepb")
 south_edge = SubResource("Resource_vn3na")
 west_edge = SubResource("Resource_cwhb1")
 
@@ -428,7 +428,7 @@ type = 2
 definition_id = 0
 can_traverse = true
 
-[sub_resource type="Resource" id="Resource_d2fq2"]
+[sub_resource type="Resource" id="Resource_baoov"]
 script = ExtResource("2_2kbbm")
 type = 1
 definition_id = 0
@@ -437,7 +437,7 @@ definition_id = 0
 script = ExtResource("1_t58h8")
 east_edge = SubResource("Resource_bhyfp")
 south_edge = SubResource("Resource_6x4xn")
-west_edge = SubResource("Resource_d2fq2")
+west_edge = SubResource("Resource_baoov")
 
 [sub_resource type="Resource" id="Resource_65jmy"]
 script = ExtResource("2_2kbbm")

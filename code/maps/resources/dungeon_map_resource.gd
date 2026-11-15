@@ -45,6 +45,41 @@ func set_cell(pos: Vector2i, cell: DungeonCellResource) -> void:
 	var index := pos.y * size.x + pos.x
 	cells[index] = cell
 
+
+func get_reachable_cells(start: Vector2i, max_distance: int = 4) -> Array[Vector2i]:
+	var to_return: Array[Vector2i] = []
+	
+	if not is_valid_position(start):
+		return to_return
+	if get_cell(start) == null:
+		return to_return
+	
+	var queue: Array[Vector2i] = [ start ]
+	var distances: Dictionary = { start: 0 }
+	
+	while not queue.is_empty():
+		var current: Vector2i = queue.pop_front()
+		var current_distance: int = distances[current]
+		to_return.push_back(current)
+		
+		if current_distance >= max_distance:
+			continue
+		
+		for direction in 4:
+			var neighbor := current + DungeonDirection.get_vector(direction)
+			if not is_valid_position(neighbor):
+				continue
+			if distances.has(neighbor):
+				continue
+			
+			var edge := get_edge(current, direction)
+			if edge != null and edge.type != DungeonEdgeResource.Type.NONE:
+				continue
+			
+			distances[neighbor] = current_distance + 1
+			queue.push_back(neighbor)
+	return to_return
+
 #endregion
 #region Edges
 

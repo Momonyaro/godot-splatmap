@@ -15,16 +15,16 @@ const DEF_WALL_LUT: Dictionary = { # This is relative to the floor, meaning the 
 const DEF_WALL_W_LUT: Array = [16, 8, 4, 2]
 
 
-static func get_default_render_batch(pos: Vector2, facing: DungeonDirection.Facing, map: DungeonMapResource) -> Array:
+static func get_default_render_batch(pos: Vector2, facing: DungeonDirection.Facing, map: DungeonMapResource, reachable_positions: Array[Vector2i]) -> Array:
 	var arr := []
 	
 	for d in range(3, -1, -1):
-		arr.append_array(_gather_default_at_depth(pos, facing, d, map))
+		arr.append_array(_gather_default_at_depth(pos, facing, d, map, reachable_positions))
 	
 	return arr
 
 
-static func _gather_default_at_depth(pos: Vector2, facing: DungeonDirection.Facing, depth: int, map: DungeonMapResource) -> Array:
+static func _gather_default_at_depth(pos: Vector2, facing: DungeonDirection.Facing, depth: int, map: DungeonMapResource, reachable_positions: Array[Vector2i]) -> Array:
 	var buckets := {
 		"l": [], "l1": [], "f": [], "r": [], "r1": []
 	}
@@ -35,6 +35,8 @@ static func _gather_default_at_depth(pos: Vector2, facing: DungeonDirection.Faci
 		var x_o := x + offset_x
 		var sample_pos := _get_relative_frustrum(x_o, depth, Vector2i(roundi(pos.x), roundi(pos.y)), facing)
 		
+		if not reachable_positions.has(sample_pos):
+			continue
 		if map.is_valid_position(sample_pos):
 			for f in 4:
 				var relative_dir := DungeonDirection.get_relative(facing, f)
@@ -101,15 +103,20 @@ const TURN_WALL_LUT := {
 		Vector2i(0, 0): ["tr_d0", Vector2i(16, 13)], 
 		Vector2i(1, 0): ["tr_d1", Vector2i(4, 11)], Vector2i(0, 1): ["tr1_d1", Vector2i(28, 10)],
 		Vector2i(2, 0): ["tr_d2", Vector2i(-2, 10)], Vector2i(1, 1): ["tr1_d2", Vector2i(16, 10)],
+		Vector2i(2, 1): ["tr_d3", Vector2i(10, 9)],
 	}
 }
 
-static func get_turning_render_batch(pos: Vector2, start_facing: DungeonDirection.Facing, target_facing: DungeonDirection.Facing, map: DungeonMapResource) -> Array:
+static func get_turning_render_batch(pos: Vector2, start_facing: DungeonDirection.Facing, target_facing: DungeonDirection.Facing, map: DungeonMapResource, reachable_positions: Array[Vector2i]) -> Array:
 	var arr := []
+	
 	for i in TURN_WALL_ORDERING.size():
 		var local_pos := TURN_WALL_ORDERING[i]
 		var localized_local_pos := _localize_frustrum_turning(start_facing, target_facing, local_pos)
 		var sample_pos := Vector2i(roundi(pos.x), roundi(pos.y)) + localized_local_pos
+		
+		if not reachable_positions.has(sample_pos):
+			continue
 		
 		if map.is_valid_position(sample_pos):
 			var edge1 := map.get_edge(sample_pos, start_facing)
@@ -158,22 +165,22 @@ static func _draw_in_order(t1: DungeonDirection.Facing, t2: DungeonDirection.Fac
 const STEP_WALL_LUT: Dictionary = { # This is relative to the floor, meaning the height of the wall needs to be taken into account when drawing
 	0: { "sl": Vector2i(0, 14), "sl1": Vector2i(0, 14), "sf": Vector2i(4, 13), "sr": Vector2i(28, 14), "sr1": Vector2i(17, 9) },
 	1: { "sl": Vector2i(4, 13), "sl1": Vector2i(0, 14), "sf": Vector2i(10, 11), "sr": Vector2i(22, 13), "sr1": Vector2i(17, 9) },
-	2: { "sl": Vector2i(10, 11), "sl1": Vector2i(0, 14), "sf": Vector2i(13, 10), "sr": Vector2i(19, 11), "sr1": Vector2i(17, 9) },
-	3: { "sl": Vector2i(13, 10), "sl1": Vector2i(0, 14), "sf": Vector2i(13, 10), "sr": Vector2i(17, 10), "sr1": Vector2i(17, 9) },
+	2: { "sl": Vector2i(10, 11), "sl1": Vector2i(6, 10), "sf": Vector2i(13, 10), "sr": Vector2i(19, 11), "sr1": Vector2i(19, 10) },
+	3: { "sl": Vector2i(13, 10), "sl1": Vector2i(13, 10), "sf": Vector2i(13, 10), "sr": Vector2i(17, 10), "sr1": Vector2i(14, 10) },
 }
 const STEP_WALL_W_LUT: Array = [24, 12, 6, 4]
 
 
-static func get_step_render_batch(pos: Vector2, facing: DungeonDirection.Facing, map: DungeonMapResource) -> Array:
+static func get_step_render_batch(pos: Vector2, facing: DungeonDirection.Facing, map: DungeonMapResource, reachable_positions: Array[Vector2i]) -> Array:
 	var arr := []
 	
 	for d in range(3, -1, -1):
-		arr.append_array(_gather_step_at_depth(pos, facing, d, map))
+		arr.append_array(_gather_step_at_depth(pos, facing, d, map, reachable_positions))
 	
 	return arr
 
 
-static func _gather_step_at_depth(pos: Vector2, facing: DungeonDirection.Facing, depth: int, map: DungeonMapResource) -> Array:
+static func _gather_step_at_depth(pos: Vector2, facing: DungeonDirection.Facing, depth: int, map: DungeonMapResource, reachable_positions: Array[Vector2i]) -> Array:
 	var buckets := {
 		"sl": [], "sl1": [], "sf": [], "sr": [], "sr1": []
 	}
@@ -183,6 +190,9 @@ static func _gather_step_at_depth(pos: Vector2, facing: DungeonDirection.Facing,
 	for x in width + 1:
 		var x_o := x + offset_x
 		var sample_pos := _get_relative_frustrum(x_o, depth, Vector2i(roundi(pos.x), roundi(pos.y)), facing)
+		
+		if not reachable_positions.has(sample_pos):
+			continue
 		
 		if map.is_valid_position(sample_pos):
 			for f in 4:
@@ -203,7 +213,7 @@ static func _gather_step_at_depth(pos: Vector2, facing: DungeonDirection.Facing,
 					continue
 				var rel_char := "%s%s" % ["s", _relative_facing_to_char(relative_dir, x_o)]
 				if rel_char.contains("1"):
-					if true: continue
+					if depth < 2: continue
 					elif depth == 3: wall_w += 2
 				
 				var is_door := "d" if not rel_char.contains("1") and edge.type == DungeonEdgeResource.Type.DOOR and depth < 3 else ""

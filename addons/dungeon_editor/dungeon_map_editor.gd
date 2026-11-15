@@ -13,6 +13,7 @@ var _canvas: DungeonMapCanvas
 var _tool_option: OptionButton
 var _direction_option: OptionButton
 var _symmetric_check: CheckButton
+var _double_sided_check: CheckButton
 var _traversable_check: CheckButton
 var _selected_label: Label
 var _tags_input: LineEdit
@@ -36,48 +37,6 @@ func set_undo_redo(manager: EditorUndoRedoManager) -> void:
 
 
 func _build_interface() -> void:
-	var toolbar := HBoxContainer.new()
-	add_child(toolbar)
-	
-	_tool_option = OptionButton.new()
-	_tool_option.add_item("Select", Tool.SELECT)
-	_tool_option.add_item("Wall", Tool.WALL)
-	_tool_option.add_item("Door", Tool.DOOR)
-	_tool_option.add_item("Erase", Tool.ERASE)
-	_tool_option.item_selected.connect(_on_tool_selected)
-	toolbar.add_child(_tool_option)
-	
-	var direction_label := Label.new()
-	direction_label.text = "Direction:"
-	toolbar.add_child(direction_label)
-	
-	_direction_option = OptionButton.new()
-	_direction_option.add_item("North", DungeonDirection.Facing.NORTH)
-	_direction_option.add_item("East", DungeonDirection.Facing.EAST)
-	_direction_option.add_item("South", DungeonDirection.Facing.SOUTH)
-	_direction_option.add_item("West", DungeonDirection.Facing.WEST)
-	_direction_option.item_selected.connect(_on_direction_selected)
-	toolbar.add_child(_direction_option)
-	
-	_symmetric_check = CheckButton.new()
-	_symmetric_check.text = "Symmetric"
-	_symmetric_check.button_pressed = true
-	toolbar.add_child(_symmetric_check)
-	
-	_traversable_check = CheckButton.new()
-	_traversable_check.text = "Can Traverse"
-	_traversable_check.visible = false
-	toolbar.add_child(_traversable_check)
-	
-	var save_spacer := Control.new()
-	save_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	toolbar.add_child(save_spacer)
-	
-	_save_button = Button.new()
-	_save_button.text = "Save Map"
-	_save_button.pressed.connect(_save_map)
-	toolbar.add_child(_save_button)
-	
 	# Cell properties toolbar
 	var cell_toolbar := HBoxContainer.new()
 	add_child(cell_toolbar)
@@ -115,6 +74,56 @@ func _build_interface() -> void:
 	_status_label.text = "No map loaded"
 	add_child(_status_label)
 	_update_selection_interface()
+	
+	# Toolbar
+	var toolbar := HBoxContainer.new()
+	add_child(toolbar)
+	
+	_tool_option = OptionButton.new()
+	_tool_option.add_item("Select", Tool.SELECT)
+	_tool_option.add_item("Wall", Tool.WALL)
+	_tool_option.add_item("Door", Tool.DOOR)
+	_tool_option.add_item("Erase", Tool.ERASE)
+	_tool_option.item_selected.connect(_on_tool_selected)
+	toolbar.add_child(_tool_option)
+	
+	var direction_label := Label.new()
+	direction_label.text = "Direction:"
+	toolbar.add_child(direction_label)
+	
+	_direction_option = OptionButton.new()
+	_direction_option.add_item("North", DungeonDirection.Facing.NORTH)
+	_direction_option.add_item("East", DungeonDirection.Facing.EAST)
+	_direction_option.add_item("South", DungeonDirection.Facing.SOUTH)
+	_direction_option.add_item("West", DungeonDirection.Facing.WEST)
+	_direction_option.item_selected.connect(_on_direction_selected)
+	toolbar.add_child(_direction_option)
+	
+	_symmetric_check = CheckButton.new()
+	_symmetric_check.text = "Symmetric"
+	_symmetric_check.toggled.connect(_on_symmetry_toggled)
+	_symmetric_check.button_pressed = false
+	toolbar.add_child(_symmetric_check)
+	
+	_double_sided_check = CheckButton.new()
+	_double_sided_check.text = "Double Sided"
+	_double_sided_check.toggled.connect(_on_double_sided_toggled)
+	_double_sided_check.button_pressed = true
+	toolbar.add_child(_double_sided_check)
+	
+	_traversable_check = CheckButton.new()
+	_traversable_check.text = "Can Traverse"
+	_traversable_check.visible = false
+	toolbar.add_child(_traversable_check)
+	
+	var save_spacer := Control.new()
+	save_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	toolbar.add_child(save_spacer)
+	
+	_save_button = Button.new()
+	_save_button.text = "Save Map"
+	_save_button.pressed.connect(_save_map)
+	toolbar.add_child(_save_button)
 
 
 func edit_map(value: DungeonMapResource) -> void:
@@ -156,6 +165,14 @@ func _on_tool_selected(index: int) -> void:
 func _on_direction_selected(index: int) -> void:
 	_active_direction = _direction_option.get_item_id(index)
 	_canvas.set_selected_direction(_active_direction)
+
+
+func _on_symmetry_toggled(value: bool) -> void:
+	_canvas.set_symmetry(value)
+
+
+func _on_double_sided_toggled(value: bool) -> void:
+	_canvas.set_double_sided(value)
 
 
 func _on_cell_clicked(pos: Vector2i) -> void:
@@ -221,7 +238,7 @@ func _paint_edge(pos: Vector2i) -> void:
 	var changes: Array[Dictionary] = []
 	_add_edge_change(changes, cell, _active_direction, new_edge)
 	
-	if _symmetric_check.button_pressed:
+	if _double_sided_check.button_pressed:
 		var neighbor_position := pos + DungeonDirection.get_vector(_active_direction)
 		if _map.is_valid_position(neighbor_position):
 			var neighbor := _map.get_cell(neighbor_position)
@@ -231,6 +248,21 @@ func _paint_edge(pos: Vector2i) -> void:
 				if new_edge != null:
 					mirrored_edge = new_edge.duplicate()
 					_add_edge_change(changes, neighbor, opposite, mirrored_edge)
+	if _symmetric_check.button_pressed:
+		var opposite := DungeonDirection.opposite(_active_direction)
+		var mirrored_edge: DungeonEdgeResource = null
+		if new_edge != null:
+			mirrored_edge = new_edge.duplicate()
+			_add_edge_change(changes, cell, opposite, mirrored_edge)
+			if _double_sided_check.button_pressed:
+				var neighbor_position := pos + DungeonDirection.get_vector(opposite)
+				if _map.is_valid_position(neighbor_position):
+					var neighbor := _map.get_cell(neighbor_position)
+					if neighbor != null:
+						var m_mirrored_edge: DungeonEdgeResource = null
+						if new_edge != null:
+							m_mirrored_edge = new_edge.duplicate()
+							_add_edge_change(changes, neighbor, _active_direction, m_mirrored_edge)
 	_commit_edge_changes(changes)
 
 

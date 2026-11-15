@@ -15,6 +15,8 @@ const TAGGED_CELL_COLOR := Color(0.95, 0.75, 0.3)
 var map: DungeonMapResource
 var selected_cell := Vector2i(-1, -1)
 var selected_direction := DungeonDirection.Facing.NORTH
+var is_symmetric := false
+var is_double_sided := false
 
 var _cell_size := 32.0
 var _grid_origin := Vector2.ZERO
@@ -32,6 +34,16 @@ func set_selected_cell(pos: Vector2i) -> void:
 
 func set_selected_direction(dir: DungeonDirection.Facing) -> void:
 	selected_direction = dir
+	queue_redraw()
+
+
+func set_symmetry(value: bool) -> void:
+	is_symmetric = value
+	queue_redraw()
+
+
+func set_double_sided(value: bool) -> void:
+	is_double_sided = value
 	queue_redraw()
 
 
@@ -67,6 +79,7 @@ func _get_cell_rect(pos: Vector2i) -> Rect2:
 
 
 func _draw_cells() -> void:
+	var inset := _cell_size * 0.2
 	for y in map.size.y:
 		for x in map.size.x:
 			var pos := Vector2i(x, y)
@@ -80,7 +93,9 @@ func _draw_cells() -> void:
 			
 			var cell := map.get_cell(pos)
 			if cell != null and not cell.tags.is_empty():
-				draw_circle(rect.position + Vector2(7, 7), 2.5, TAGGED_CELL_COLOR)
+				draw_circle(rect.position + Vector2(inset, inset), inset * 0.5, TAGGED_CELL_COLOR)
+				if cell.has_tag("spawn"):
+					draw_circle(rect.position + Vector2(inset * 2.05, inset), inset * 0.5, TRAVERSABLE_DOOR_COLOR)
 
 
 func _draw_grid() -> void:
@@ -110,6 +125,14 @@ func _draw_selected_edge() -> void:
 	
 	var rect := _get_cell_rect(selected_cell)
 	_draw_edge(rect, selected_direction, 0, false, true)
+	if is_double_sided:
+		var pos := rect.position + (Vector2(DungeonDirection.get_vector(selected_direction)) * _cell_size)
+		_draw_edge(Rect2(pos, rect.size), DungeonDirection.opposite(selected_direction), 0, false, true)
+	if is_symmetric:
+		_draw_edge(rect, DungeonDirection.opposite(selected_direction), 0, false, true)
+		if is_double_sided:
+			var pos := rect.position + (Vector2(DungeonDirection.get_vector(DungeonDirection.opposite(selected_direction))) * _cell_size)
+			_draw_edge(Rect2(pos, rect.size), selected_direction, 0, false, true)
 
 
 func _draw_edges() -> void:

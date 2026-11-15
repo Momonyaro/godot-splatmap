@@ -5,24 +5,30 @@
 [ext_resource type="Texture2D" uid="uid://bjx1c7qtlo5rk" path="res://art/ui/ui_panel_2.tres" id="4_ppyta"]
 [ext_resource type="Texture2D" uid="uid://ckk3i72g4t611" path="res://art/sky_test_2.png" id="5_ehkex"]
 [ext_resource type="Texture2D" uid="uid://b3g2nnqh4g72v" path="res://art/font/_font_sheet_alt.png" id="6_g14j6"]
+[ext_resource type="Resource" uid="uid://ca26ml5mxyrd4" path="res://test_map.tres" id="7_xersf"]
 [ext_resource type="Script" uid="uid://bm3a4ogjkp3xa" path="res://code/maps/tilesets/smt1_mall_tileset.gd" id="8_ehkex"]
-[ext_resource type="Resource" uid="uid://c3tu56ymyhfca" path="res://art/vcpr_bake_test_mall.tres" id="8_xersf"]
+[ext_resource type="Resource" uid="uid://qn5766a8ir1q" path="res://art/vcpr_bake_test_mall.tres" id="8_xersf"]
 [ext_resource type="Shader" uid="uid://ba0xdthacgtrc" path="res://crt.gdshader" id="18_4uo0j"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vxl6d"]
 shader = ExtResource("18_4uo0j")
 shader_parameter/mask_type = 2
 shader_parameter/curve = 0.0
-shader_parameter/sharpness = 0.7950000140125
+shader_parameter/sharpness = 1.0
 shader_parameter/color_offset = 0.0
 shader_parameter/mask_brightness = 1.0
 shader_parameter/scanline_brightness = 1.0
-shader_parameter/min_scanline_thickness = 0.5
+shader_parameter/min_scanline_thickness = 1.0
 shader_parameter/aspect = 0.75
 shader_parameter/wobble_strength = 0.0
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_mf4mk"]
 size = Vector2(256, 224)
+
+[sub_resource type="Curve" id="Curve_xersf"]
+_limits = [-8.0, 8.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.499, 8), 0.0, 0.0, 0, 0, Vector2(0.5, -8), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
 
 [sub_resource type="GDScript" id="GDScript_4uo0j"]
 resource_name = "FPS_COUNTER"
@@ -80,7 +86,9 @@ test_cell = ExtResource("3_6uqi0")
 test_cell2 = ExtResource("4_ppyta")
 test_sky = ExtResource("5_ehkex")
 test_font = ExtResource("6_g14j6")
-debug_vram_view = NodePath("../../../TextureRect")
+test_map = ExtResource("7_xersf")
+debug_vram_view = NodePath("../../../Panel/TextureRect")
+turn_tween_curve = SubResource("Curve_xersf")
 
 [node name="Tileset" type="Node" parent="MarginContainer/ViewParent/SplatmapViewport" unique_id=1518786511]
 script = ExtResource("8_ehkex")
@@ -95,11 +103,14 @@ offset_bottom = 39.0
 text = "FPS:"
 script = SubResource("GDScript_4uo0j")
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=69198246]
-texture_filter = 1
-texture_repeat = 1
+[node name="Panel" type="PanelContainer" parent="." unique_id=308724341]
 layout_mode = 0
 offset_left = 16.0
-offset_top = 48.0
-offset_right = 272.0
-offset_bottom = 304.0
+offset_top = 38.0
+offset_right = 56.0
+offset_bottom = 78.0
+
+[node name="TextureRect" type="TextureRect" parent="Panel" unique_id=69198246]
+texture_filter = 1
+texture_repeat = 1
+layout_mode = 2

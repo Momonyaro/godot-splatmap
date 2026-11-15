@@ -5,9 +5,24 @@ extends TextureRect
 @export var test_cell2: Texture2D
 @export var test_sky: Texture2D
 @export var test_font: Texture2D
+@export var test_map: DungeonMapResource
 @export var hp_bar_color := Color.from_string("29cc49", Color.WHITE)
 @export var ap_bar_color := Color.from_string("ff5b5b", Color.WHITE)
 @export var debug_vram_view: TextureRect
+@export var turn_tween_curve: Curve
+
+var _player_pos := Vector2()
+var _target_pos := Vector2i()
+var _player_facing := DungeonDirection.Facing.NORTH
+var _target_facing := DungeonDirection.Facing.NORTH
+
+var _turning := 0
+var _turn_dir := 0
+var _move_progress := 0.0
+
+var _stepping := false
+
+var _sub_offset := Vector2i()
 
 
 func _enter_tree() -> void:
@@ -25,10 +40,10 @@ func _ready() -> void:
 	Splatmap._vram.write_img(0, 0, test_cell.get_image(), Rect2i(Vector2i(), test_cell.get_size()))
 	Splatmap._vram.write_img(3, 0, test_cell2.get_image(), Rect2i(Vector2i(), test_cell2.get_size()))
 	Splatmap._vram.write_img(31, 0, test_sky.get_image(), Rect2i(Vector2i(), test_sky.get_size()))
-	Splatmap._vram.write_img(0, 27, test_font.get_image(), Rect2i(Vector2i(), test_font.get_size()))
+	Splatmap._vram.write_img(0, 9, test_font.get_image(), Rect2i(Vector2i(), test_font.get_size()))
 	
 	if $Tileset != null:
-		$Tileset.write_to_vram(Splatmap._vram, Vector2i(0, 3))
+		$Tileset.write_to_vram(Splatmap._vram, Vector2i(0, 14))
 	
 	if debug_vram_view:
 		debug_vram_view.texture = ImageTexture.create_from_image(Splatmap._vram._data)
@@ -41,17 +56,92 @@ func _ready() -> void:
 	for y in range(2, 16, 1):
 		Splatmap.register_draw(SplatDrawLineCmd.new(Vector2i(31, y - 2), y, 0))
 	
-	Splatmap.register_draw(SplatDrawComplexCmd.new($Tileset.get_complex_wall("r_d3"), Vector2i(17, 8)))
-	Splatmap.register_draw(SplatDrawComplexCmd.new($Tileset.get_complex_wall("l_d2"), Vector2i(12, 6)))
-	Splatmap.register_draw(SplatDrawComplexCmd.new($Tileset.get_complex_wall("f_d2"), Vector2i(18, 8)))
-	Splatmap.register_draw(SplatDrawComplexCmd.new($Tileset.get_complex_wall("r_d1"), Vector2i(20, 2)))
-	Splatmap.register_draw(SplatDrawComplexCmd.new($Tileset.get_complex_wall("f_d1"), Vector2i(4, 6)))
-	Splatmap.register_draw(SplatDrawComplexCmd.new($Tileset.get_complex_wall("l_d0"), Vector2i(0, 2)))
-	Splatmap.register_draw(SplatDrawComplexCmd.new($Tileset.get_complex_wall("f_d0"), Vector2i(24, 2)))
+	_player_pos = test_map.find_pos_with_tag(&"spawn")
 
 
-func _process(_delta: float) -> void:
-	pass
+func _process(delta: float) -> void:
+	var culled_data := []
+	
+	if _stepping:
+		if _move_progress <= 0.5:
+			culled_data = DungeonRenderUtils.get_step_render_batch(_player_pos, _player_facing, test_map)
+		else:
+			_player_pos = _target_pos
+			culled_data = DungeonRenderUtils.get_default_render_batch(_player_pos, _player_facing, test_map)
+		_sub_offset.x = 0
+		_move_progress = clampf(_move_progress + delta * 3, 0.0, 1.0)
+	elif _turning > 0:
+		if _move_progress <= 0.25:
+			var slide_x := lerpf(0.0, -1.0, _move_progress * 4)
+			_sub_offset.x = roundi(8 * _turn_dir * slide_x)
+			culled_data = DungeonRenderUtils.get_default_render_batch(_player_pos, _player_facing, test_map)
+		elif _move_progress <= 0.75:
+			var slide_x := lerpf(1.0, -1.0, (_move_progress - 0.25) * 2)
+			_sub_offset.x = roundi(16 * _turn_dir * slide_x)
+			culled_data = DungeonRenderUtils.get_turning_render_batch(_player_pos, _player_facing, _target_facing, test_map)
+		else:
+			_player_facing = _target_facing
+			var slide_x := lerpf(1.0, 0.0, (_move_progress - 0.75) * 4)
+			_sub_offset.x = roundi(8 * _turn_dir * slide_x)
+			culled_data = DungeonRenderUtils.get_default_render_batch(_player_pos, _player_facing, test_map)
+		_move_progress = clampf(_move_progress + delta * 2, 0.0, 1.0)
+	else:
+		culled_data = DungeonRenderUtils.get_default_render_batch(_player_pos, _player_facing, test_map)
+		_move_progress = clampf(_move_progress + delta, 0.0, 1.0)
+		
+	if _move_progress == 1.0:
+		_turning = maxi(0, _turning - 1)
+		_sub_offset.x = 0
+		if _stepping:
+			_stepping = false
+		if _turning > 0:
+			_target_facing = _player_facing + _turn_dir
+			if _target_facing >= 4: _target_facing -= 4
+			if _target_facing < 0: _target_facing += 4
+			_move_progress = 0.0
+	
+	
+	for line in culled_data:
+		var wall_h: int = $Tileset.get_wall_height(line[0])
+		var grid_pos: Vector2i = (Vector2i(0, 2 - wall_h) + line[1]) * Splatmap.Vram.CELL_SIZE
+		Splatmap.add_immediate(SplatDrawComplexCmd.new($Tileset.get_complex_wall(line[0]), _sub_offset + grid_pos, 0, false))
+
+
+func _input(event: InputEvent) -> void:
+	if _turning > 0 or _stepping:
+		return
+	
+	if event is InputEventKey and event.pressed:
+		if event.keycode == KEY_RIGHT:
+			_turn(1)
+		elif event.keycode == KEY_LEFT:
+			_turn(-1)
+		elif event.keycode == KEY_DOWN:
+			_turn(2)
+		elif event.keycode == KEY_UP:
+			_try_step()
+
+
+func _turn(delta: int) -> void:
+	_target_facing = _player_facing + signi(delta)
+	if _target_facing >= 4: _target_facing -= 4
+	if _target_facing < 0: _target_facing += 4
+	_turn_dir = signi(delta)
+	_turning = absi(delta)
+	_move_progress = 0.0
+
+
+func _try_step() -> void:
+		var can_traverse := true
+		var edge := test_map.get_edge(_player_pos, _player_facing)
+		if edge != null:
+			can_traverse = edge.can_traverse
+		if can_traverse:
+			_target_pos = _player_pos + Vector2(DungeonDirection.get_vector(_player_facing))
+		else:
+			_target_pos = _player_pos
+		_stepping = true
+		_move_progress = 0
 
 
 func _draw_ui():
@@ -151,21 +241,21 @@ func _get_char_pos(character: String) -> Vector2i:
 	var upper = character.to_upper()
 	var index := chars.find(upper)
 	if upper == character:
-		return Vector2i(index, 27)
+		return Vector2i(index, 9)
 	else:
-		return Vector2i(index, 28)
+		return Vector2i(index, 10)
 
 
 func _get_num_pos(num: String) -> Vector2i:
 	const chars := '0123456789'
 	var index := chars.find(num)
-	return Vector2i(index, 29)
+	return Vector2i(index, 11)
 
 
 func _get_symbol_pos(symbol: String) -> Vector2i:
 	const chars := '[]()/?!+-%=_'
 	var index := chars.find(symbol)
-	return Vector2i(index, 30)
+	return Vector2i(index, 12)
 
 
 func _resize() -> void:

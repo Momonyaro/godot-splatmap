@@ -6,7 +6,7 @@ class_name SplatWavyEffect extends SplatEffect
 
 # Vertical region affected by the effect, in image pixel coordinates.
 @export_range(0, 4096, 1) var effect_y_start: int = 16
-@export_range(0, 4096, 1) var effect_y_end: int = 112
+@export_range(0, 4096, 1) var effect_y_end: int = 128
 
 # Distance over which the effect fades at each boundary.
 @export_range(0, 128, 1) var fade_distance: int = 16

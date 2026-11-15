@@ -87,6 +87,21 @@ func get_events_at(pos: Vector2i, facing: DungeonDirection.Facing) -> Array[Dung
 		result.push_back(dungeon_event)
 	return result
 
+
+func find_cell_with_tag(tag: StringName) -> DungeonCellResource:
+	for cell in cells:
+		if cell.has_tag(tag):
+			return cell
+	return null
+
+
+func find_pos_with_tag(tag: StringName) -> Vector2:
+	for y in size.y:
+		for x in size.x:
+			if get_cell(Vector2i(x, y)).has_tag(tag):
+				return Vector2(x, y)
+	return Vector2(-1, -1)
+
 #endregion
 #region Validation
 

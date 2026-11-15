@@ -6,6 +6,6 @@
 [resource]
 script = ExtResource("1_6wnj1")
 source_image = ExtResource("2_142sc")
-max_columns = 31
-regions = Array[Rect2i]([Rect2i(0, 0, 64, 112), Rect2i(0, 112, 64, 88), Rect2i(0, 200, 32, 88), Rect2i(32, 200, 32, 48), Rect2i(32, 248, 16, 48), Rect2i(48, 248, 16, 24), Rect2i(48, 272, 8, 24), Rect2i(64, 136, 48, 56), Rect2i(64, 0, 96, 88), Rect2i(64, 88, 96, 48), Rect2i(112, 136, 48, 24)])
+max_columns = 32
+regions = Array[Rect2i]([Rect2i(0, 112, 64, 88), Rect2i(160, 112, 64, 88), Rect2i(0, 0, 64, 112), Rect2i(160, 0, 64, 112), Rect2i(32, 200, 32, 48), Rect2i(192, 200, 32, 48), Rect2i(0, 200, 32, 88), Rect2i(160, 200, 32, 88), Rect2i(64, 0, 32, 64), Rect2i(48, 248, 16, 24), Rect2i(208, 248, 16, 24), Rect2i(32, 248, 16, 48), Rect2i(192, 248, 16, 48), Rect2i(96, 0, 48, 48), Rect2i(48, 272, 8, 24), Rect2i(96, 48, 24, 24), Rect2i(320, 0, 136, 104), Rect2i(320, 104, 136, 104), Rect2i(64, 104, 96, 88), Rect2i(224, 96, 96, 88), Rect2i(64, 240, 48, 56), Rect2i(96, 0, 48, 48), Rect2i(224, 0, 48, 48), Rect2i(64, 192, 96, 48), Rect2i(224, 48, 96, 48), Rect2i(112, 240, 48, 24), Rect2i(0, 296, 96, 104), Rect2i(96, 296, 96, 104), Rect2i(224, 184, 32, 112), Rect2i(0, 400, 48, 72), Rect2i(48, 400, 48, 72), Rect2i(256, 184, 48, 104), Rect2i(256, 288, 48, 104), Rect2i(96, 400, 24, 40), Rect2i(120, 400, 24, 40), Rect2i(304, 216, 24, 72), Rect2i(304, 288, 24, 72), Rect2i(328, 248, 16, 40), Rect2i(328, 288, 16, 40)])
 metadata/_custom_type_script = "uid://cv3bcc3q5lgoh"

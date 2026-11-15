@@ -2,7 +2,7 @@ extends RefCounted
 
 const CELL_SIZE := 8
 const MEM_WIDTH := 32
-const MEM_HEIGHT := 32
+const MEM_HEIGHT := 64
 
 var initialized := false 
 

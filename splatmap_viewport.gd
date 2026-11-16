@@ -9,7 +9,6 @@ extends TextureRect
 @export var hp_bar_color := Color.from_string("29cc49", Color.WHITE)
 @export var ap_bar_color := Color.from_string("ff5b5b", Color.WHITE)
 @export var debug_vram_view: TextureRect
-@export var turn_tween_curve: Curve
 
 var _player_pos := Vector2()
 var _target_pos := Vector2i()
@@ -53,7 +52,7 @@ func _ready() -> void:
 	_resize.call_deferred()
 	visible = true
 	
-	_draw_ui()
+	#_draw_ui()
 	for y in range(2, 16, 1):
 		Splatmap.register_draw(SplatDrawLineCmd.new(Vector2i(31, y - 2), y, 0))
 	

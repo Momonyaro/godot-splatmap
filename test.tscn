@@ -8,6 +8,7 @@
 [ext_resource type="Resource" uid="uid://ca26ml5mxyrd4" path="res://test_map.tres" id="7_xersf"]
 [ext_resource type="Script" uid="uid://bm3a4ogjkp3xa" path="res://code/maps/tilesets/smt1_mall_tileset.gd" id="8_ehkex"]
 [ext_resource type="Resource" uid="uid://qn5766a8ir1q" path="res://art/vcpr_bake_test_mall.tres" id="8_xersf"]
+[ext_resource type="PackedScene" uid="uid://bxo32tp0nir2d" path="res://scenes/game.tscn" id="10_00tp4"]
 [ext_resource type="Shader" uid="uid://ba0xdthacgtrc" path="res://crt.gdshader" id="18_4uo0j"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vxl6d"]
@@ -24,11 +25,6 @@ shader_parameter/wobble_strength = 0.0
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_mf4mk"]
 size = Vector2(256, 224)
-
-[sub_resource type="Curve" id="Curve_xersf"]
-_limits = [-8.0, 8.0, 0.0, 1.0]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.499, 8), 0.0, 0.0, 0, 0, Vector2(0.5, -8), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 4
 
 [sub_resource type="GDScript" id="GDScript_4uo0j"]
 resource_name = "FPS_COUNTER"
@@ -88,7 +84,6 @@ test_sky = ExtResource("5_ehkex")
 test_font = ExtResource("6_g14j6")
 test_map = ExtResource("7_xersf")
 debug_vram_view = NodePath("../../../Panel/TextureRect")
-turn_tween_curve = SubResource("Curve_xersf")
 
 [node name="Tileset" type="Node" parent="MarginContainer/ViewParent/SplatmapViewport" unique_id=1518786511]
 script = ExtResource("8_ehkex")
@@ -114,3 +109,5 @@ offset_bottom = 78.0
 texture_filter = 1
 texture_repeat = 1
 layout_mode = 2
+
+[node name="Game" parent="." unique_id=1871087400 instance=ExtResource("10_00tp4")]

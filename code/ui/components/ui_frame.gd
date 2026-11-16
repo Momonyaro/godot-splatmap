@@ -10,7 +10,7 @@ func setup(ui: Node) -> void:
 
 
 func update() -> void:
-	var vis: bool = _ui.get_state("ui.frame.visible", false)
+	var vis: bool = _ui.get_state("frame.visible", false)
 	
 	if vis and _cmds.is_empty():
 		_register_draws()
@@ -25,7 +25,7 @@ func _register_draws() -> void:
 		"bl": Vector2i(0, 2), "bc": Vector2i(1, 2), "br": Vector2i(2, 2)
 	}
 	
-	var ui_layer = _ui.get_state("ui.layer")
+	var ui_layer = _ui.get_state("layer")
 	
 	# TOP BAR
 	_cmds.push_back(Splatmap.register_draw(SplatDrawBoxCmd.new(panel_1, Vector2i(-1, -1), Vector2i(2, 3), true, ui_layer)))
@@ -51,7 +51,7 @@ func _register_draws() -> void:
 
 
 func _unregister_draws() -> void:
-	var ui_layer = _ui.get_state("ui.layer")
+	var ui_layer = _ui.get_state("layer")
 	for cmd in _cmds:
 		Splatmap.unregister_draw(ui_layer, cmd)
 	_cmds.clear()

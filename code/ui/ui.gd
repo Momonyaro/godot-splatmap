@@ -4,9 +4,9 @@ extends Node
 ## Container for other UI components, managing states.
 
 var _state: Dictionary = {
-	"ui.layer": 3,
-	"ui.frame.visible": true,
-	"ui.cmdbar.visible": true
+	"layer": 2,
+	"frame.visible": true,
+	"cmdbar.visible": true
 }
 
 func _ready() -> void:

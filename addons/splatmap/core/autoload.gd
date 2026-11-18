@@ -43,6 +43,10 @@ func get_canvas_size() -> Vector2i:
 	return _canvas_size
 
 
+func write_to_vram(texture: Texture2D, destination: Vector2i) -> void:
+	_vram.write_img(destination.x, destination.y, texture.get_image(), Rect2i(Vector2i(), texture.get_size()))
+
+
 func add_immediate(cmd: SplatCmd):
 	_layers[cmd.layer].add_immediate(cmd)
 

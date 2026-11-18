@@ -1,10 +1,7 @@
 [gd_scene format=3 uid="uid://cl38xjlv1pwin"]
 
 [ext_resource type="Script" uid="uid://dv7molyrpclo" path="res://splatmap_viewport.gd" id="1_37kl0"]
-[ext_resource type="Texture2D" uid="uid://kkndwft3d8fg" path="res://art/ui/ui_panel_1.tres" id="3_6uqi0"]
-[ext_resource type="Texture2D" uid="uid://bjx1c7qtlo5rk" path="res://art/ui/ui_panel_2.tres" id="4_ppyta"]
 [ext_resource type="Texture2D" uid="uid://ckk3i72g4t611" path="res://art/sky_test_2.png" id="5_ehkex"]
-[ext_resource type="Texture2D" uid="uid://b3g2nnqh4g72v" path="res://art/font/_font_sheet_alt.png" id="6_g14j6"]
 [ext_resource type="Resource" uid="uid://ca26ml5mxyrd4" path="res://test_map.tres" id="7_xersf"]
 [ext_resource type="Script" uid="uid://bm3a4ogjkp3xa" path="res://code/maps/tilesets/smt1_mall_tileset.gd" id="8_ehkex"]
 [ext_resource type="Resource" uid="uid://qn5766a8ir1q" path="res://art/vcpr_bake_test_mall.tres" id="8_xersf"]
@@ -78,10 +75,7 @@ texture = SubResource("PlaceholderTexture2D_mf4mk")
 expand_mode = 3
 stretch_mode = 5
 script = ExtResource("1_37kl0")
-test_cell = ExtResource("3_6uqi0")
-test_cell2 = ExtResource("4_ppyta")
 test_sky = ExtResource("5_ehkex")
-test_font = ExtResource("6_g14j6")
 test_map = ExtResource("7_xersf")
 debug_vram_view = NodePath("../../../Panel/TextureRect")
 

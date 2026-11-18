@@ -26,11 +26,6 @@ func execute(target: Image, ctx):
 		dst = dst_pos * ctx.vram.CELL_SIZE
 		scaled_size = size * ctx.vram.CELL_SIZE
 	
-	ctx.vram.sample_cellv(parts['tl'], target, dst)
-	ctx.vram.sample_cellv(parts['tr'], target, dst + Vector2i(scaled_size.x, 0))
-	ctx.vram.sample_cellv(parts['bl'], target, dst + Vector2i(0, scaled_size.y))
-	ctx.vram.sample_cellv(parts['br'], target, dst + Vector2i(scaled_size.x, scaled_size.y))
-	
 	if not stretch:
 		for x in range(1, size.x, 1):
 			ctx.vram.sample_cellv(parts['tc'], target, dst + Vector2i(x * ctx.vram.CELL_SIZE, 0))
@@ -68,3 +63,8 @@ func execute(target: Image, ctx):
 			
 			center_area.resize(scaled_size.x - 2, scaled_size.y - 2, Image.INTERPOLATE_NEAREST)
 			target.blit_rect(center_area, Rect2i(Vector2i(), center_area.get_size()), dst + Vector2i(ctx.vram.CELL_SIZE, ctx.vram.CELL_SIZE))
+	
+	ctx.vram.sample_cellv(parts['tl'], target, dst)
+	ctx.vram.sample_cellv(parts['tr'], target, dst + Vector2i(scaled_size.x, 0))
+	ctx.vram.sample_cellv(parts['bl'], target, dst + Vector2i(0, scaled_size.y))
+	ctx.vram.sample_cellv(parts['br'], target, dst + Vector2i(scaled_size.x, scaled_size.y))

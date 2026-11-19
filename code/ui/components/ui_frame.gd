@@ -3,12 +3,14 @@ extends UIComponentBase
 ## [ui_frame.gd]
 ## Frame surrounding game view when in-game
 
-func setup(ui: Node) -> void:
-	_ui = ui
 
+func _init() -> void:
+	_observed_states = [
+		"ui", "ui.layer", "ui.frame.visible"
+	]
 
 func update() -> void:
-	var vis: bool = _ui.get_state("frame.visible", false)
+	var vis: bool = owner.get_state("ui.frame.visible", false)
 	
 	if vis and _cmds.is_empty():
 		_register_draws()
@@ -23,7 +25,7 @@ func _register_draws() -> void:
 		"bl": Vector2i(0, 2), "bc": Vector2i(1, 2), "br": Vector2i(2, 2)
 	}
 	
-	var ui_layer = _ui.get_state("layer")
+	var ui_layer = owner.get_state("ui.layer")
 	
 	# TOP BAR
 	_register_draw(SplatDrawBoxCmd.new(panel_1, Vector2i(-1, -1), Vector2i(2, 3), true, ui_layer))
@@ -49,7 +51,7 @@ func _register_draws() -> void:
 
 
 func _unregister_draws() -> void:
-	var ui_layer = _ui.get_state("layer")
+	var ui_layer = owner.get_state("ui.layer")
 	for cmd in _cmds:
 		Splatmap.unregister_draw(ui_layer, cmd)
 	_cmds.clear()

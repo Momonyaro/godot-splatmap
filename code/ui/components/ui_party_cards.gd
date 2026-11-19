@@ -7,13 +7,14 @@ const ORIGO_PX := Vector2i(8, 144)
 const CARD_SIZE_PX := Vector2i(52, 64)
 const PORTRAIT_SIZE_PX := Vector2i(51, 32)
 
-
-func setup(ui: Node) -> void:
-	_ui = ui
+func _init() -> void:
+	_observed_states = [
+		"ui", "ui.layer", "ui.party.visible", "ui.party.items", "battle.active"
+	]
 
 
 func update() -> void:
-	var vis: bool = _ui.get_state("party.visible", false)
+	var vis: bool = owner.get_state("ui.party.visible", false)
 	#TODO: Add check for party data change to reduce updates
 	
 	if vis:
@@ -25,8 +26,8 @@ func update() -> void:
 
 
 func _register_draws() -> void:
-	var ui_layer = _ui.get_state("layer")
-	var party_data: Array = _ui.get_state("party.items", [])
+	var ui_layer = owner.get_state("ui.layer")
+	var party_data: Array = owner.get_state("ui.party.items", [])
 	for i in 4:
 		var item = {}
 		if party_data.size() > i:
@@ -65,7 +66,7 @@ func _draw_card(index: int, card_data: Dictionary, layer: int) -> void:
 	
 	_register_draw(SplatColorAreaCmd.new(Color.WHITE_SMOKE, offset + Vector2i(4, 4), PORTRAIT_SIZE_PX, layer, false))
 	
-	if _ui.get_state("party.in_battle", false):
+	if owner.get_state("battle.active", false):
 		_register_draw(SplatDrawComplexCmd.new(header, offset, layer, false))
 		_register_draw(SplatDrawComplexCmd.new(active_text, offset + Vector2i(10, 2), layer, false))
 		if card_data.get("active", false):
@@ -101,7 +102,7 @@ func _draw_card(index: int, card_data: Dictionary, layer: int) -> void:
 
 
 func _unregister_draws() -> void:
-	var ui_layer = _ui.get_state("layer")
+	var ui_layer = owner.get_state("ui.layer")
 	for cmd in _cmds:
 		Splatmap.unregister_draw(ui_layer, cmd)
 	_cmds.clear()

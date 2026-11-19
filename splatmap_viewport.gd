@@ -128,7 +128,7 @@ func _turn(delta: int) -> void:
 
 func _set_player_facing(value: DungeonDirection.Facing) -> void:
 	if _player_facing != value:
-		get_tree().root.get_node("/root/TEST_SCENE/Game/UI").set_state("cmdbar.text", str("LOCATION                          1F - ", DungeonDirection.Facing.keys()[value]))
+		get_tree().root.get_node("/root/TEST_SCENE/Game").set_state("world.player.facing", value)
 	
 	_player_facing = value
 

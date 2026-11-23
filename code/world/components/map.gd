@@ -37,9 +37,7 @@ func _process(delta: float) -> void:
 		_sub_offset.x = 0
 		_move_progress = clampf(_move_progress + delta * 3, 0.0, 1.0)
 	elif _turning > 0:
-		var _target_facing = _player_facing + (_turning * _turn_dir)
-		if _target_facing >= 4: _target_facing -= 4
-		elif _target_facing < 0: _target_facing += 4
+		var _target_facing = _loop_between(_player_facing + _turn_dir, 0, 4)
 		
 		if _move_progress <= 0.25:
 			var slide_x := lerpf(0.0, -1.0, _move_progress * 4)

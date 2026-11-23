@@ -1,18 +1,22 @@
 extends LevelTileset
 
-@export var tileset: BakeResultResource
+var tileset_ref: String = "res://art/vcpr_bake_test_mall.tres"
+var _tileset: BakeResultResource
 var _current_offset := Vector2i(0, 0)
 var _baked_walls := {}
+
+func _init() -> void:
+	_tileset = load(tileset_ref)
 
 func write_to_vram(vram, offset: Vector2i) -> void:
 	_current_offset = offset
 	vram.write_img(offset.x, offset.y, get_vram_data().get_image(), Rect2i(Vector2i(), get_vram_size()))
 
 func get_vram_data() -> Texture2D: 
-	return load(tileset.atlas_path)
+	return load(_tileset.atlas_path)
 
 func get_vram_size() -> Vector2i:
-	return tileset.atlas_size
+	return _tileset.atlas_size
 
 func get_complex_wall(key: String) -> Array:
 	if _baked_walls.has(key):
@@ -199,22 +203,22 @@ func get_wall_height(key: String) -> int:
 
 
 func _get_region_height(region: int) -> int:
-	if tileset == null:
+	if _tileset == null:
 		return 0
 	
-	var region_cell_size: Vector2i = tileset.regions[region].size / tileset.tile_size
+	var region_cell_size: Vector2i = _tileset.regions[region].size / _tileset.tile_size
 	return region_cell_size.y
 
 
 # Works off the assumption that all sprites are by default drawn for right walls
 func _build_left_wall(region: int) -> Array:
-	if tileset == null:
+	if _tileset == null:
 		return []
 	
-	var region_cell_size: Vector2i = tileset.regions[region].size / tileset.tile_size
+	var region_cell_size: Vector2i = _tileset.regions[region].size / _tileset.tile_size
 	
 	var to_return = []
-	for mapping in tileset.mappings:
+	for mapping in _tileset.mappings:
 		if mapping.region_index != region:
 			continue
 		if mapping.atlas_position == Vector2i(-1, -1):
@@ -224,7 +228,7 @@ func _build_left_wall(region: int) -> Array:
 		var y := mapping.tile_position.y
 		
 		to_return.push_back([
-			_current_offset + (mapping.atlas_position / tileset.tile_size), 
+			_current_offset + (mapping.atlas_position / _tileset.tile_size), 
 			Vector2i(x, y), 
 			true, 
 			false, 
@@ -235,18 +239,18 @@ func _build_left_wall(region: int) -> Array:
 
 
 func _build_right_wall(region: int) -> Array:
-	if tileset == null:
+	if _tileset == null:
 		return []
 	
 	var to_return = []
-	for mapping in tileset.mappings:
+	for mapping in _tileset.mappings:
 		if mapping.region_index != region:
 			continue
 		if mapping.atlas_position == Vector2i(-1, -1):
 			continue
 		
 		to_return.push_back([
-			_current_offset + (mapping.atlas_position / tileset.tile_size), 
+			_current_offset + (mapping.atlas_position / _tileset.tile_size), 
 			mapping.tile_position, 
 			false, 
 			false, 
@@ -257,13 +261,13 @@ func _build_right_wall(region: int) -> Array:
 
 
 func _build_flat_wall(region: int) -> Array:
-	if tileset == null:
+	if _tileset == null:
 		return []
 	
-	var region_cell_size: Vector2i = tileset.regions[region].size / tileset.tile_size
+	var region_cell_size: Vector2i = _tileset.regions[region].size / _tileset.tile_size
 	
 	var to_return = []
-	for mapping in tileset.mappings:
+	for mapping in _tileset.mappings:
 		if mapping.region_index != region:
 			continue
 		if mapping.atlas_position == Vector2i(-1, -1):
@@ -273,7 +277,7 @@ func _build_flat_wall(region: int) -> Array:
 		var rev_y := mapping.tile_position.y
 		
 		to_return.push_back([
-			_current_offset + (mapping.atlas_position / tileset.tile_size), 
+			_current_offset + (mapping.atlas_position / _tileset.tile_size), 
 			mapping.tile_position, 
 			false, 
 			false, 
@@ -281,7 +285,7 @@ func _build_flat_wall(region: int) -> Array:
 		])
 		
 		to_return.push_back([
-			_current_offset + (mapping.atlas_position / tileset.tile_size), 
+			_current_offset + (mapping.atlas_position / _tileset.tile_size), 
 			Vector2i(rev_x, rev_y), 
 			true, 
 			false, 

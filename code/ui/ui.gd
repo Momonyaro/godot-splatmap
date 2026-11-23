@@ -9,11 +9,10 @@ const TO_LOAD: Dictionary = {
 } 
 
 var _initial_ui_state: Dictionary = {
-	"ui.layer": 2,
+	"ui.layer": 3,
 	"ui.frame.visible": true,
 	"ui.cmdbar.visible": true,
 	"ui.party.visible": true,
-	"ui.party.in_battle": true,
 	"ui.party.items": [
 		{ "name": "Momonyaro", "hp": Vector2i(999, 999), "ap": Vector2i(100, 200), "active": true }, 
 		{ "name": "Splatmap", "hp": Vector2i(999, 999), "ap": Vector2i(0, 0), "active": false }

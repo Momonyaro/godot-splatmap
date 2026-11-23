@@ -9,6 +9,7 @@ var _state := {}
 
 
 func set_state(key: String, value: Variant, send_event: bool = true) -> void:
+	print("setting state for %s - %s" % [key, value])
 	var path := _build_path(key)
 	if path.size() > 0:
 		var last_box := _state

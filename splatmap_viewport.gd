@@ -29,15 +29,11 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
-	Splatmap._vram.write_img(31, 0, test_sky.get_image(), Rect2i(Vector2i(), test_sky.get_size()))
-	
-	if $Tileset != null:
-		$Tileset.write_to_vram(Splatmap._vram, Vector2i(0, 14))
 	Splatmap.clear_color = clear_color
 	#Splatmap.set_layer_effect(0, "wavy", SplatWavyEffect.new())
 	_resize.call_deferred()
 	visible = true
-	
+	return
 	# Draw Sky
 	for y in range(2, 16, 1):
 		Splatmap.register_draw(SplatDrawLineCmd.new(Vector2i(31, y - 2), y, 0))
@@ -47,6 +43,9 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	if debug_vram_view:
+		debug_vram_view.texture = ImageTexture.create_from_image(Splatmap._vram._data)
+	return
 	var culled_data := []
 	
 	if _stepping:
@@ -94,36 +93,9 @@ func _process(delta: float) -> void:
 		var grid_pos: Vector2i = (Vector2i(0, 2 - wall_h) + line[1]) * Splatmap.Vram.CELL_SIZE
 		Splatmap.add_immediate(SplatDrawComplexCmd.new($Tileset.get_complex_wall(line[0]), _sub_offset + grid_pos, 0, false))
 	
-	if debug_vram_view:
-		debug_vram_view.texture = ImageTexture.create_from_image(Splatmap._vram._data)
-	
 	var parent := get_parent_control()
 	if parent and parent.size != _last_parent_size:
 		_resize()
-
-
-func _input(event: InputEvent) -> void:
-	if _turning > 0 or _stepping:
-		return
-	
-	if event is InputEventKey and event.pressed:
-		if event.keycode == KEY_RIGHT:
-			_turn(1)
-		elif event.keycode == KEY_LEFT:
-			_turn(-1)
-		elif event.keycode == KEY_DOWN:
-			_turn(2)
-		elif event.keycode == KEY_UP:
-			_try_step()
-
-
-func _turn(delta: int) -> void:
-	_target_facing = _player_facing + signi(delta)
-	if _target_facing >= 4: _target_facing -= 4
-	if _target_facing < 0: _target_facing += 4
-	_turn_dir = signi(delta)
-	_turning = absi(delta)
-	_move_progress = 0.0
 
 
 func _set_player_facing(value: DungeonDirection.Facing) -> void:
@@ -131,19 +103,6 @@ func _set_player_facing(value: DungeonDirection.Facing) -> void:
 		get_tree().root.get_node("/root/TEST_SCENE/Game").set_state("world.player.facing", value)
 	
 	_player_facing = value
-
-
-func _try_step() -> void:
-		var can_traverse := true
-		var edge := test_map.get_edge(_player_pos, _player_facing)
-		if edge != null:
-			can_traverse = edge.can_traverse
-		if can_traverse:
-			_target_pos = _player_pos + Vector2(DungeonDirection.get_vector(_player_facing))
-		else:
-			_target_pos = _player_pos
-		_stepping = true
-		_move_progress = 0
 
 
 func _resize() -> void:

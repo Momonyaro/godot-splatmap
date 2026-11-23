@@ -1,6 +1,7 @@
 @tool class_name DungeonMapResource extends Resource
 
 @export var size: Vector2i = Vector2i(16, 16)
+@export_file_path var tileset_ref: String = ""
 
 @export_group("Map Data")
 @export var cells: Array[DungeonCellResource] = []

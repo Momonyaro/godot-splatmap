@@ -1,18 +1,29 @@
 [gd_scene format=3 uid="uid://bxo32tp0nir2d"]
 
 [ext_resource type="Script" uid="uid://b0ipvneunsqos" path="res://code/core/game.gd" id="1_uwrxv"]
-[ext_resource type="Script" uid="uid://d26w8v0dab83x" path="res://code/core/world.gd" id="2_p57ef"]
+[ext_resource type="Script" uid="uid://ddtrpxcm0t8uq" path="res://code/core/input.gd" id="2_gee14"]
+[ext_resource type="Script" uid="uid://d26w8v0dab83x" path="res://code/world/world.gd" id="2_p57ef"]
 [ext_resource type="Script" uid="uid://br80iwuj0p1yh" path="res://code/ui/ui.gd" id="2_yqjtg"]
 [ext_resource type="Script" uid="uid://dqbbacyx1eet7" path="res://code/ui/components/ui_frame.gd" id="3_lnu2h"]
+[ext_resource type="Script" uid="uid://cydxlslrxhyhu" path="res://code/world/components/map.gd" id="3_u5sy4"]
 [ext_resource type="Script" uid="uid://bh2yx5n4q0258" path="res://code/ui/components/ui_cmdbar.gd" id="4_lbhrr"]
 [ext_resource type="Script" uid="uid://d245b84pcakbf" path="res://code/ui/components/ui_party_cards.gd" id="5_iywne"]
 
 [node name="Game" type="Node" unique_id=1871087400]
 script = ExtResource("1_uwrxv")
 
+[node name="Input" type="Node" parent="." unique_id=1148307196]
+script = ExtResource("2_gee14")
+
 [node name="World" type="Node" parent="." unique_id=266290767]
 unique_name_in_owner = true
 script = ExtResource("2_p57ef")
+
+[node name="Map" type="Node" parent="World" unique_id=68805]
+unique_name_in_owner = true
+script = ExtResource("3_u5sy4")
+
+[node name="Tileset" type="Node" parent="World/Map" unique_id=319091302]
 
 [node name="UI" type="Node" parent="." unique_id=1621822014]
 unique_name_in_owner = true

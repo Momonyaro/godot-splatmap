@@ -12,13 +12,13 @@ func _enter_tree() -> void:
 func _exit_tree() -> void:
 	owner.state_updated.disconnect(_on_state_updated)
 
-func _register_draw(cmd: SplatCmd) -> void:
-	_cmds.push_back(Splatmap.register_draw(cmd))
-	pass
-
 func _on_state_updated(key: String, _value: Variant) -> void:
 	if key in _observed_states:
 		update()
+
+func _register_draw(cmd: SplatCmd) -> void:
+	_cmds.push_back(Splatmap.register_draw(cmd))
+	pass
 
 func _get_game() -> Node:
 	return owner

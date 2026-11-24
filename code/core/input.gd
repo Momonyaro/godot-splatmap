@@ -65,7 +65,7 @@ func _turn(delta: int) -> void:
 	if _target_facing < 0: _target_facing += 4
 	_turn_dir = signi(delta)
 	_turning = absi(delta)
-	owner.set_state("input.turn_dir", _turn_dir)
+	owner.set_state("input.turn_dir", _turn_dir, false)
 	owner.set_state("input.turning", _turning)
 
 
@@ -78,9 +78,9 @@ func _try_step() -> void:
 	if edge != null:
 		can_traverse = edge.can_traverse
 	if can_traverse:
-		owner.set_state("input.move_dir", DungeonDirection.get_vector(player_facing))
+		owner.set_state("input.move_dir", DungeonDirection.get_vector(player_facing), false)
 	else:
-		owner.set_state("input.move_dir", Vector2i())
+		owner.set_state("input.move_dir", Vector2i(), false)
 	
 	_moving = true
 	owner.set_state("input.moving", _moving)

@@ -4,7 +4,6 @@
 [ext_resource type="Texture2D" uid="uid://ckk3i72g4t611" path="res://art/sky_test_2.png" id="5_ehkex"]
 [ext_resource type="Resource" uid="uid://ca26ml5mxyrd4" path="res://test_map.tres" id="7_xersf"]
 [ext_resource type="Script" uid="uid://bm3a4ogjkp3xa" path="res://code/maps/tilesets/smt1_mall_tileset.gd" id="8_ehkex"]
-[ext_resource type="Resource" uid="uid://qn5766a8ir1q" path="res://art/vcpr_bake_test_mall.tres" id="8_xersf"]
 [ext_resource type="PackedScene" uid="uid://bxo32tp0nir2d" path="res://scenes/game.tscn" id="10_00tp4"]
 [ext_resource type="Shader" uid="uid://ba0xdthacgtrc" path="res://crt.gdshader" id="18_4uo0j"]
 
@@ -81,7 +80,6 @@ debug_vram_view = NodePath("../../../Panel/TextureRect")
 
 [node name="Tileset" type="Node" parent="MarginContainer/ViewParent/SplatmapViewport" unique_id=1518786511]
 script = ExtResource("8_ehkex")
-tileset = ExtResource("8_xersf")
 
 [node name="Label" type="Label" parent="." unique_id=1234993322]
 layout_mode = 0

@@ -16,8 +16,8 @@ func _on_state_updated(key: String, _value: Variant) -> void:
 	if key in _observed_states:
 		update()
 
-func _register_draw(cmd: SplatCmd) -> void:
-	_cmds.push_back(Splatmap.register_draw(cmd))
+func _register_draw(layer: int, cmd: SplatCmd) -> void:
+	_cmds.push_back(Splatmap.register_cmd(layer, cmd))
 	pass
 
 func _get_game() -> Node:

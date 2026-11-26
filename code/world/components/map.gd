@@ -61,15 +61,15 @@ func _process(delta: float) -> void:
 				culled_data = DungeonRenderUtils.get_turning_render_batch(_player_pos, _player_facing, target_facing, map, _reachable_cells)
 			else:
 				var slide_x = lerpf(1.0, 0.0, (_move_progress - 0.75) * 4)
-				sub_offset_x = roundi(16 * _turn_dir * slide_x)
+				sub_offset_x = roundi(8 * _turn_dir * slide_x)
 				culled_data = DungeonRenderUtils.get_default_render_batch(_player_pos, target_facing, map, _reachable_cells)
 	
 	update_move_progress(delta)
 	
 	for line in culled_data:
 		var wall_height: int = $Tileset.get_wall_height(line[0])
-		var grid_pos: Vector2i = (Vector2i(0, 2 - wall_height) + line[1]) * Splatmap.Vram.CELL_SIZE
-		Splatmap.add_immediate(SplatDrawComplexCmd.new($Tileset.get_complex_wall(line[0]), Vector2i(sub_offset_x, 0) + grid_pos, _layer, false))
+		var grid_pos: Vector2i = (Vector2i(0, 2 - wall_height) + line[1]) * Vram.CELL_SIZE
+		Splatmap.add_transient(_layer, SplatDrawBatchCmd.create($Tileset.get_complex_wall(line[0]), Vector2i(sub_offset_x, 0) + grid_pos, false, true))
 	
 	if _move_progress == 1.0:
 		var new_turning = maxi(0, _turning - 1)
@@ -125,11 +125,12 @@ func _update_map(map_name: String) -> void:
 	var tileset: LevelTileset = load(map.tileset_ref).new()
 	tileset_parent.set_script(tileset.get_script())
 	
-	$Tileset.write_to_vram(Splatmap._vram, Vector2i(0, 14))
+	$Tileset.write_to_vram(Splatmap.vram(), Vector2i(0, 14))
+	
 	Splatmap.write_to_vram(load(map.sky_strip_ref), Vector2i(31, 0))
 	
 	for y in range(2, 16, 1):
-		Splatmap.register_draw(SplatDrawLineCmd.new(Vector2i(31, y - 2), y, 1))
+		Splatmap.register_cmd(1, SplatDrawLineCmd.create(Vector2i(31, y - 2), y, true, false))
 
 
 func _update_input() -> void:

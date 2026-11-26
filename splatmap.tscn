@@ -1,0 +1,4 @@
+[gd_scene format=3 uid="uid://dd0ymrymkycsa"]
+
+[node name="Splatmap" type="SplatmapNode" unique_id=1761704136]
+process_priority = 1

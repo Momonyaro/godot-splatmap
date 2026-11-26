@@ -22,6 +22,7 @@ var _initial_ui_state: Dictionary = {
 func _ready() -> void:
 	for key in TO_LOAD.keys():
 		var res := load(key)
+		print("writing %s to %s" % [res, TO_LOAD[key]])
 		Splatmap.write_to_vram(res, TO_LOAD[key])
 	
 	var bulk_keys := []

@@ -20,13 +20,13 @@ func _enter_tree() -> void:
 	if ProjectSettings.has_setting("splatmap/canvas_size"):
 		_canvas_size = ProjectSettings.get_setting("splatmap/canvas_size")
 	_canvas = Image.create_empty(_canvas_size.x, _canvas_size.y, false, Image.FORMAT_RGBA8)
-	
+
 	_render_context =  {
 		'vram': _vram,
 		'screen_w': _canvas_size.x,
 		'screen_h': _canvas_size.y
 	}
-	
+
 	for i in 4:
 		_layers.push_back(Layer.new(i, _canvas_size))
 
@@ -77,19 +77,19 @@ func _render_to_target(delta: float) -> void:
 	_canvas.fill(clear_color)
 	#_checkerboard()
 	#_rand_noise(256)
-	
+
 	for i in _layers.size():
 		var layer = _layers[i]
 		layer.render(_render_context)
 		layer.apply_effects(delta)
-		
+
 		if layer.has_commands():
 			if layer.draw_fast || i == 0:
 				_canvas.blit_rect(layer.image, Rect2i(Vector2i(), _canvas_size), Vector2i())
 			else:
 				_canvas.blend_rect(layer.image, Rect2i(Vector2i(), _canvas_size), Vector2i())
 			layer.flush()
-		
+
 	_render_target.set_image(_canvas)
 
 

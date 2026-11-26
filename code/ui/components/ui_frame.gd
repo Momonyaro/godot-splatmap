@@ -28,30 +28,30 @@ func _register_draws() -> void:
 	var ui_layer = owner.get_state("ui.layer")
 	
 	# TOP BAR
-	_register_draw(SplatDrawBoxCmd.new(panel_1, Vector2i(-1, -1), Vector2i(2, 3), true, ui_layer))
-	_register_draw(SplatDrawBoxCmd.new(panel_1, Vector2i(1, -1), Vector2i(30, 3), true, ui_layer))
-	_register_draw(SplatDrawBoxCmd.new(panel_1, Vector2i(31, -1), Vector2i(2, 3), true, ui_layer))
+	_register_draw(ui_layer, SplatDrawBoxCmd.create(panel_1, Vector2i(-1, -1), Vector2i(2, 3), true, true))
+	_register_draw(ui_layer, SplatDrawBoxCmd.create(panel_1, Vector2i(1, -1), Vector2i(30, 3), true, true))
+	_register_draw(ui_layer, SplatDrawBoxCmd.create(panel_1, Vector2i(31, -1), Vector2i(2, 3), true, true))
 	
 	# VIEWPORT SIDES
-	_register_draw(SplatDrawBoxCmd.new(panel_1, Vector2i(-1, 2), Vector2i(2, 14), true, ui_layer))
-	_register_draw(SplatDrawBoxCmd.new(panel_1, Vector2i(31, 2), Vector2i(2, 14), true, ui_layer))
+	_register_draw(ui_layer, SplatDrawBoxCmd.create(panel_1, Vector2i(-1, 2), Vector2i(2, 14), true, true))
+	_register_draw(ui_layer, SplatDrawBoxCmd.create(panel_1, Vector2i(31, 2), Vector2i(2, 14), true, true))
 	
 	# CMD SIDES
-	_register_draw(SplatDrawBoxCmd.new(panel_1, Vector2i(-1, 16), Vector2i(2, 2), true, ui_layer))
-	_register_draw(SplatDrawBoxCmd.new(panel_1, Vector2i(31, 16), Vector2i(2, 2), true, ui_layer))
+	_register_draw(ui_layer, SplatDrawBoxCmd.create(panel_1, Vector2i(-1, 16), Vector2i(2, 2), true, true))
+	_register_draw(ui_layer, SplatDrawBoxCmd.create(panel_1, Vector2i(31, 16), Vector2i(2, 2), true, true))
 	
 	# LIST SIDES
-	_register_draw(SplatDrawBoxCmd.new(panel_1, Vector2i(-1, 18), Vector2i(2, 9), true, ui_layer))
-	_register_draw(SplatDrawBoxCmd.new(panel_1, Vector2i(31, 18), Vector2i(2, 9), true, ui_layer))
+	_register_draw(ui_layer, SplatDrawBoxCmd.create(panel_1, Vector2i(-1, 18), Vector2i(2, 9), true, true))
+	_register_draw(ui_layer, SplatDrawBoxCmd.create(panel_1, Vector2i(31, 18), Vector2i(2, 9), true, true))
 	
 	# BOTTOM BAR
-	_register_draw(SplatDrawBoxCmd.new(panel_1, Vector2i(-1, 27), Vector2i(2, 2), true, ui_layer))
-	_register_draw(SplatDrawBoxCmd.new(panel_1, Vector2i(1, 27), Vector2i(30, 2), true, ui_layer))
-	_register_draw(SplatDrawBoxCmd.new(panel_1, Vector2i(31, 27), Vector2i(2, 2), true, ui_layer))
+	_register_draw(ui_layer, SplatDrawBoxCmd.create(panel_1, Vector2i(-1, 27), Vector2i(2, 2), true, true))
+	_register_draw(ui_layer, SplatDrawBoxCmd.create(panel_1, Vector2i(1, 27), Vector2i(30, 2), true, true))
+	_register_draw(ui_layer, SplatDrawBoxCmd.create(panel_1, Vector2i(31, 27), Vector2i(2, 2), true, true))
 
 
 func _unregister_draws() -> void:
 	var ui_layer = owner.get_state("ui.layer")
 	for cmd in _cmds:
-		Splatmap.unregister_draw(ui_layer, cmd)
+		Splatmap.unregister_cmd(ui_layer, cmd)
 	_cmds.clear()

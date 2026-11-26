@@ -8,9 +8,9 @@ var _baked_walls := {}
 func _init() -> void:
 	_tileset = load(tileset_ref)
 
-func write_to_vram(vram, offset: Vector2i) -> void:
+func write_to_vram(vram: Vram, offset: Vector2i) -> void:
 	_current_offset = offset
-	vram.write_img(offset.x, offset.y, get_vram_data().get_image(), Rect2i(Vector2i(), get_vram_size()))
+	vram.write_image(offset.x, offset.y, get_vram_data().get_image(), Rect2i(Vector2i(), get_vram_size()))
 
 func get_vram_data() -> Texture2D: 
 	return load(_tileset.atlas_path)

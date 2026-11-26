@@ -13,12 +13,10 @@ config_version=5
 config/name="Splatmap"
 run/main_scene="uid://cl38xjlv1pwin"
 config/features=PackedStringArray("4.6", "GL Compatibility")
-run/max_fps=1000
-run/low_processor_mode=true
 
 [autoload]
 
-Splatmap="*uid://b4im23jivccd3"
+Splatmap="*uid://dd0ymrymkycsa"
 
 [display]
 
@@ -26,7 +24,7 @@ window/vsync/vsync_mode=0
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/dungeon_editor/plugin.cfg", "res://addons/splatmap/plugin.cfg", "res://addons/tileset_bakery/plugin.cfg")
+enabled=PackedStringArray("res://addons/dungeon_editor/plugin.cfg", "res://addons/tileset_bakery/plugin.cfg")
 
 [physics]
 
@@ -37,7 +35,3 @@ enabled=PackedStringArray("res://addons/dungeon_editor/plugin.cfg", "res://addon
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
-
-[splatmap]
-
-canvas_size=Vector2i(256, 224)
